@@ -71,25 +71,33 @@ void levelOrderTraversal(node* root) {
 
 }
 
+// Inorder = L N R ( left-node-root)
+// go until last values ( down most become null ) /
+//return at NULL
+//  and then print then , root print and then right print
 void InorderTraversal( node* root)
 {
-  if(root->left==NULL && root->right==NULL)
-  {cout<<root->data<<" ";
-  return;}
-
+  if(root==NULL)
+    return;
+// left most call
   InorderTraversal(root->left);
+  //printing the root data after returning from left tree
   cout<<root->data<<" ";
+  //goint to the right tree
   InorderTraversal(root->right);
 }
 
+// N L R  (node left right)
+// start printing from fist root , then go to left
 void PreorderTraversal( node* root)
 {
-  if(root->left==NULL && root->right==NULL)
-  {cout<<root->data<<" ";
-  return;}
+  if(root==NULL)
+    return;
+  //printing the node data( root value)
   cout<<root->data<<" ";
+  // going to the left tree
   PreorderTraversal(root->left);
-
+  //going to the right tree
   PreorderTraversal(root->right);
 }
 
@@ -132,5 +140,7 @@ int main()
   // Number_leaf_nodes(root , cnt);
   // cout<<endl;
   // cout<<cnt<<endl;
+
+PreorderTraversal(root);
 return 0;
 }
