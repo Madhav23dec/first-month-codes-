@@ -445,11 +445,6 @@ public:
     }
   }
 
-  leftView_iteration(node* root)
-  {
-    left_view(root);
-  }
-
 };
 
 class diagonalTraversal
@@ -494,8 +489,7 @@ int main()
 
   node* root= NULL;
   root=BuildTree(root);
-  
-  leftView_iteration(root);
+  zig_zagSTACK(root);
 
 return 0;
 }
