@@ -82,7 +82,143 @@ void pushEnd(queue<int> q , vector<int> &v)
   pushEnd(q,v);
   v.push_back(temp);
 }
-void zig_zag_traversal( node* root)
+
+
+
+
+class zig_zag_traversal_EXTRAspace
+{
+// s1 - putting all elements in a array according to level order
+// s2 - for NULL put -1 in array
+// s3 - in that array making  bool , and altering it at every -1
+// s4 - print accordint to this bool ( if true then print(current -1 to next -1)
+// ( if false then print( next -1 to current -1 in reverse order ))
+public:
+  vector<int> zig_zag_traversal( node* root)
+  {
+  if(root==NULL)
+  {
+    vector<int>ans ={0};
+    return ans;
+  }
+
+  queue<node*> q;
+  q.push(root);
+  q.push(NULL);
+  bool direction = 1 ;// +1 is for left to right
+  vector<int> ans;
+  while(!q.empty())
+  {
+    node* temp= q.front();
+    q.pop();
+    if(temp)
+    {
+      ans.push_back(temp->data);
+      if(temp->left)
+        q.push(temp->left);
+      if(temp->right)
+        q.push(temp->right);
+
+    }
+    else if(temp==NULL)
+    {
+      ans.push_back(-1);
+      if(!q.empty())
+        q.push(NULL);
+    }
+  }
+
+  return ans;
+}
+
+  int next_NULL_inVector(vector<int>&v , int current)
+  {
+    int size=v.size();
+    int i=current+1;
+    while(v[i]!=-1)
+      i++;
+
+    return i;
+  }
+  void print_zigzag(node*root)
+  {
+    vector<int>ans =zig_zag_traversal(root);
+
+    int size = ans.size();
+    int i=0;
+    bool LeftToRight = true ;
+    while(ans[i])
+    {   if(LeftToRight!=true)
+        {
+          int j=i;
+          int next=next_NULL_inVector(ans , j);
+          i=next;
+          for(j-1 ;j>i;j--)
+            cout<<ans[j];
+        }
+        else if(LeftToRight==true)
+        {}
+      }
+  }
+};
+
+
+
+
+
+
+
+
+
+void zig_zagSTACK( node*root)
+{
+  if(root==NULL)
+    return;
+
+  stack<node*> current;
+  stack<node*> next_level;
+
+  current.push(root);
+  bool LeftToRight = true;
+
+  while(!current.empty())
+  {
+
+    node*temp = current.top();
+    current.pop();
+    if(temp)
+    {
+      cout<<temp->data;
+
+      if(LeftToRight==true)
+      {
+        if(temp->left)
+          next_level.push(temp->left);
+        if(temp->right)
+          next_level.push(temp->right);
+      }
+
+      else if (LeftToRight!=true)
+      {
+        if(temp->right)
+          next_level.push(temp->right);
+        if(temp->left)
+          next_level.push(temp->left);
+      }
+    }
+
+    if(current.empty())
+    {
+      LeftToRight=!LeftToRight;
+      swap(current , next_level);
+      cout<<endl;
+    }
+  }
+}
+
+
+
+void zig_zagQUEUE(node*root)
 {
   if(root==NULL)
     return;
@@ -90,53 +226,68 @@ void zig_zag_traversal( node* root)
   queue<node*> q;
   q.push(root);
   q.push(NULL);
-
-  queue<int> queue2;
+  bool LeftToRight = true;
 
   while(!q.empty())
   {
     node*temp = q.front();
     q.pop();
-    if(temp!=NULL)
+    if(temp)
     {
-      queue2.push(temp->data);
-      if(temp->left)
+      cout<<temp->data;
+      if(LeftToRight==true)
       {
-        q.push(temp->left);
+        if(temp->left)
+          q.push(temp->left);
+        if(temp->right)
+          q.push(temp->right);
       }
-      if(temp->right)
+      else if (LeftToRight!=true)
       {
-        q.push(temp->right);
+        if(temp->right)
+          q.push(temp->right);
+        if(temp->left)
+          q.push(temp->left);
       }
     }
-    else if(temp==NULL)
-    {queue2.push(-1);
 
-     if(!q.empty())
-      {
+    if(temp==NULL)
+    {
+      cout<<endl;
+      if(!q.empty())
         q.push(NULL);
-      }
+
+      LeftToRight = !LeftToRight;
     }
-
-
   }
-
-  vector<int> ans;
-  bool flag=true;
-  while(!queue2.empty())
-  {
-    int temp=queue2.front();
-
-  }
-
 }
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//   vector<int> ans;
+//   bool flag=true;
+//   while(!queue2.empty())
+//   {
+//     int temp=queue2.front();
+//
+//   }
+//
+// }
 
 //do it using queue as well
 class vertical_traversal_tc_N_2
 {
 public:
 
-void vertical_traversal_maker(node* root , map<int,vector<int>> &m ,int i)
+void vertical_traversal_maker(node* root , map<int,vector<int>> &m ,int i)//where i=0 for root element
 {
   if(root==NULL)
     return;
@@ -155,6 +306,7 @@ void vertical_traversal_printing(node*root, map<int,vector<int>> &myMap)
   }
 }
 };
+
 
 //need to work on it
 class vertical_traversal_tc_N_1
@@ -233,12 +385,11 @@ public:
     if(root==NULL)
       return;
 
-    left_traversal_maker(root->left , m , leftView_level - 1);
-
-    //push the element only if the place is vacant otherwise let it stay
+//push the element only if the place is vacant otherwise let it stay
     if(!m[leftView_level])
       m[leftView_level]= root->data;
 
+    left_traversal_maker(root->left , m , leftView_level - 1);
     left_traversal_maker(root->right , m , leftView_level-1);
   }
 
@@ -294,6 +445,11 @@ public:
     }
   }
 
+  leftView_iteration(node* root)
+  {
+    left_view(root);
+  }
+
 };
 
 class diagonalTraversal
@@ -338,8 +494,8 @@ int main()
 
   node* root= NULL;
   root=BuildTree(root);
-  leftView_iteration obj1;
-  obj1.left_view(root );
+  
+  leftView_iteration(root);
 
 return 0;
 }
