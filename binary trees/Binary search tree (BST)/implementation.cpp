@@ -23,7 +23,7 @@ node* buildBST(node* root)
   if(data==NULL)
     root=NULL;
 
-
+hi my name is madhav 
 }
 
 
