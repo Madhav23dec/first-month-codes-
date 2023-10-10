@@ -22,8 +22,6 @@ node* buildBST(node* root)
   cin>>data;
   if(data==NULL)
     root=NULL;
-
-hi my name is madhav 
 }
 
 
